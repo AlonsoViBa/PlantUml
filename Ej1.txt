@@ -1,0 +1,31 @@
+@startuml
+
+actor Cliente
+boundary interfaz_pedido 
+control controlador_pedido
+entity entidad_pedido
+control controlador_producto
+entity entidad_producto
+
+
+Cliente -> interfaz_pedido : 1:realizarPedido(cliente)
+interfaz_pedido -> controlador_pedido : 1.1:iniciarPedido(datos del cliente)
+controlador_pedido -> controlador_producto : 1.1.1:listarProductos()
+controlador_producto -> entidad_producto : 1.1.1.1:recuperarProductos()
+controlador_producto <-- entidad_producto : 1.1.2:listaProductos
+controlador_producto --> controlador_pedido : 1.1.3:listaProductos
+controlador_pedido -> interfaz_pedido : 1.1.3.1:mostrarProductos(listaProductos)
+
+Cliente -> interfaz_pedido : 2:seleccionarProducto(listaProductos)
+interfaz_pedido -> controlador_producto : 2.1:recuperarDatosProducto(producto)
+controlador_producto -> entidad_producto : 2.1.1: recuperarDatos(producto)
+controlador_producto <-- entidad_producto : 2.1.2: datosProducto
+interfaz_pedido <- controlador_producto : 2.1: mostrarDatosProducto
+
+Cliente -> interfaz_pedido : 3: confirmarSeleccion(pedido)
+interfaz_pedido -> controlador_pedido : 3.1: confirmarPedido
+controlador_pedido -> entidad_pedido : 3.1.1: registrarPedido
+controlador_pedido <-- entidad_pedido : 3.1.2: registrarPedido(idPedido)
+interfaz_pedido <- controlador_pedido : 3.1.3: confirmarPedido(idPedido)
+
+@enduml
